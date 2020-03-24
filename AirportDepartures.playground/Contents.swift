@@ -66,13 +66,13 @@ class DepartureBoard {
 //: e. Stretch: Look at the API for [`DateComponents`](https://developer.apple.com/documentation/foundation/datecomponents?language=objc) for creating a specific time
 let departureBoard = DepartureBoard(currentAirport: "JFK Airport")
 
-let flight1 = Flight(terminal: nil, departureTime: Date(), flight: "AY416", airline: "Finnair", destination: "Charlotte (CLT)", flightStatus: .canceled)
+let flight1 = Flight(terminal: nil, departureTime: Date(), flight: "AY416", airline: "Finnair", destination: "Charlotte", flightStatus: .canceled)
 departureBoard.flights.append(flight1)
 
-let flight2 = Flight(terminal: "8", departureTime: Date(), flight: "AA2809", airline: "American Airlines", destination: "Charlotte (CLT)", flightStatus: .scheduled)
+let flight2 = Flight(terminal: "8", departureTime: Date(), flight: "AA2809", airline: "American Airlines", destination: "Charlotte ", flightStatus: .scheduled)
 departureBoard.flights.append(flight2)
 
-let flight3 = Flight(terminal: "2", departureTime: Date(), flight: "DL9948", airline: "Delta Air Lines", destination: "Moses Lake (MWH)", flightStatus: .enRoute)
+let flight3 = Flight(terminal: "2", departureTime: Date(), flight: "DL9948", airline: "Delta Air Lines", destination: "Moses Lake", flightStatus: .enRoute)
 departureBoard.flights.append(flight3)
 //: ## 3. Create a free-standing function that can print the flight information from the `DepartureBoard`
 //: a. Use the function signature: `printDepartures(departureBoard:)`
@@ -89,8 +89,8 @@ func printDepartures(departureBoard: DepartureBoard) {
 }
 
 printDepartures(departureBoard: departureBoard)
-//: ## 4. Make a second function to print print an empty string if the `departureTime` is nil
-//: a. Createa new `printDepartures2(departureBoard:)` or modify the previous function
+//: ## 4. Make a second function to print an empty string if the `departureTime` is nil
+//: a. Create a new `printDepartures2(departureBoard:)` or modify the previous function
 //:
 //: b. Use optional binding to unwrap any optional values, use string interpolation to turn a non-optional date into a String
 //:
@@ -103,9 +103,23 @@ printDepartures(departureBoard: departureBoard)
 //:     Destination: Los Angeles Airline: Delta Air Lines Flight: KL 6966 Departure Time:  Terminal: 4 Status: Canceled
 //:     Destination: Rochester Airline: Jet Blue Airways Flight: B6 586 Departure Time: 1:26 PM Terminal:  Status: Scheduled
 //:     Destination: Boston Airline: KLM Flight: KL 6966 Departure Time: 1:26 PM Terminal: 4 Status: Scheduled
+let dateFormatter = DateFormatter()
+dateFormatter.dateStyle = .none
+dateFormatter.timeStyle = .short
 
 
+func printDepartures2(departureBoard: DepartureBoard) {
+    for flight in departureBoard.flights {
+        if let departureTime = flight.departureTime, let terminal = flight.terminal {
+            
+             let formattedDepartureTime = dateFormatter.string(from: departureTime)
+            
+            print("Destination: \(flight.destination), Airline: \(flight.airline), Flight: \(flight.flight), Departure Time: \(formattedDepartureTime), Terminal: \(terminal), Status: \(flight.flightStatus.rawValue)")
+        }
+    }
+}
 
+printDepartures2(departureBoard: departureBoard)
 //: ## 5. Add an instance method to your `DepatureBoard` class (above) that can send an alert message to all passengers about their upcoming flight. Loop through the flights and use a `switch` on the flight status variable.
 //: a. If the flight is canceled print out: "We're sorry your flight to \(city) was canceled, here is a $500 voucher"
 //:
