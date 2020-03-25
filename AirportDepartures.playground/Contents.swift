@@ -22,9 +22,14 @@ enum FlightStatus: String {
     case boarding = "Boarding"
 }
 
+enum airportRole {
+    case Arrival
+    case Destination
+}
+
 struct Airport {
-    let departure: Bool
-    let arrival: Bool
+    let name: String
+    let role: airportRole
 }
 
 struct Flight {
@@ -47,9 +52,9 @@ struct Flight {
 
 class DepartureBoard {
     var flights: [Flight]
-    var currentAirport: String
+    var currentAirport: Airport
     
-    init(flights: [Flight] = [], currentAirport: String) {
+    init(flights: [Flight] = [], currentAirport: Airport) {
         self.flights = flights
         self.currentAirport = currentAirport
     }
@@ -93,15 +98,16 @@ class DepartureBoard {
 //: d. Make one of the flights have a `nil` terminal because it has not been decided yet.
 //:
 //: e. Stretch: Look at the API for [`DateComponents`](https://developer.apple.com/documentation/foundation/datecomponents?language=objc) for creating a specific time
-let departureBoard = DepartureBoard(currentAirport: "JFK Airport")
+let jfk = Airport(name: "JFK Airport", role: .Arrival)
+
+let departureBoard = DepartureBoard(currentAirport: jfk)
 
 let flight1 = Flight(terminal: nil, departureTime: Date(), flight: "AY416", airline: "Finnair", destination: "Charlotte", flightStatus: .canceled)
-departureBoard.flights.append(flight1)
-
 let flight2 = Flight(terminal: "8", departureTime: Date(), flight: "AA2809", airline: "American Airlines", destination: "Charlotte ", flightStatus: .scheduled)
-departureBoard.flights.append(flight2)
-
 let flight3 = Flight(terminal: "2", departureTime: Date(), flight: "DL9948", airline: "Delta Air Lines", destination: "Moses Lake", flightStatus: .enRoute)
+
+departureBoard.flights.append(flight1)
+departureBoard.flights.append(flight2)
 departureBoard.flights.append(flight3)
 //: ## 3. Create a free-standing function that can print the flight information from the `DepartureBoard`
 //: a. Use the function signature: `printDepartures(departureBoard:)`
@@ -189,4 +195,8 @@ func findPrice(checkedBags: Double, distance: Double, travelers: Double) -> Doub
     return price
 }
 
-print(findPrice(checkedBags: 5, distance: 3000, travelers: 5))
+print(findPrice(checkedBags: 5, distance: 3000, travelers: 6))
+print(findPrice(checkedBags: 8, distance: 400, travelers: 3))
+print(findPrice(checkedBags: 9, distance: 900, travelers: 9))
+print(findPrice(checkedBags: 6, distance: 4500, travelers: 4))
+print(findPrice(checkedBags: 0, distance: 0, travelers: 12))
